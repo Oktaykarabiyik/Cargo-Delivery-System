@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+<style type="text/css">
+ html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#container {
+  height: 100%;
+  display: flex;
+}
+
+#sidebar {
+  flex-basis: 15rem;
+  flex-grow: 1;
+  padding: 1rem;
+  max-width: 30rem;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+#map {
+  flex-basis: 0;
+  flex-grow: 4;
+  height: 100%;
+}
+
+#directions-panel {
+  margin-top: 10px;
+}
+   </style>
+     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+     <link rel="stylesheet" type="text/css" href="./style.css" />
+
+
+     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+     <script		
+       src="https://maps.googleapis.com/maps/api/js?key=google api keyinizi buraya girin M&callback=initMap&v=weekly"
+       async 
+     ></script>
+   
+   
+</head>
+<body>					
+<input type="submit" id="submit" />
+<div id="map-canvas"></div>
+<div id="container">
+      <div id="map"></div>
+      <div id="sidebar">
+        
+        <input type="button" id="okAc" value="Tamam" onclick="okAction()"/>
+        <input type="hidden" id="transportOkHidden" value="0"/>
+      </div>
+      
+    </div>
+
+    <script type="text/javascript">
+        // In the following example, markers appear when the user clicks on the map.
+   // Each marker is labeled with a single alphabetical character.
+   const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   let labelIndex = 0;
+   const kocaeli = { lat: 40.76820946182399, lng: 29.940392114025826 };
+   let lastPoint;
+   let points = [];
+   let markers = [];
+   let map;
+   var directionsService;
+   var directionsRenderer;
+   function initMap() {
+     directionsService = new google.maps.DirectionsService();
+     directionsRenderer = new google.maps.DirectionsRenderer();
+     map = new google.maps.Map(document.getElementById("map"), {
+       zoom: 12,
+       center: kocaeli,
+     });
+   
+     // This event listener calls addMarker() when the map is clicked.
+     google.maps.event.addListener(map, "click", (event) => {
+      if (validate()) {
+        addMarker(event.latLng, map,null);
+      } else {
+        alert('Musteri adi giriniz!');
+      }
+      
+      
+     });
+     // Add a marker at the center of the map.
+     //addMarker(kocaeli, map);
+
+     directionsRenderer.setMap(map);
+
+     document.getElementById("submit").addEventListener("click", () => {
+        calcRoute(directionsService, directionsRenderer);
+    });
+   }
+
+   function addMarkerFromDB(lat,lng,customerName) {
+    const dbMarker = { lat: parseFloat(lat), lng: parseFloat(lng) };
+    addMarker(dbMarker, map,customerName);
+   }
+
+   function okAction() {
+    if (validate()) {
+      var hiddenField = document.getElementById("transportOkHidden");
+      hiddenField.value = '1';
+    } else {
+        alert('Musteri adi giriniz!');
+    }
+   }
+
+   function validate() {
+    for (let i = 0; i < labels.length; i++) {
+      var custField = document.getElementById("customer"+labels[i]);
+      
+      if (custField != null && (custField.value == null || custField.value == '') ) {
+        return false;
+      }
+    }
+    return true;
+   }
+
+   function calcRoute(directionsService, directionsRenderer) {
+    var start = markers[0].getPosition();
+    var end = lastPoint;
+    const waypts = [...points];
+    waypts.shift();
+    waypts.pop();
+    var request = {
+        origin: start,
+        destination: end,
+        waypoints: waypts,
+        optimizeWaypoints: true,
+        travelMode: google.maps.TravelMode.DRIVING
+    };
+    directionsService.route(request, function(result, status) {
+        if (status == 'OK') {
+            console.log(result);
+            directionsRenderer.setDirections(result);
+            if (points.length > 1) {
+              setTimeout(deleteAndCalculate,10000);//5 saniye bekle sil ve Hesapla tekrar
+            }
+            
+        }
+    });
+    }
+
+    // Sets the map on all markers in the array.
+  function setMapOnAll(map) {
+    for (let i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
+    }
+  }
+
+  function deleteAndCalculate() {
+    points.shift();
+    markers[0].setMap(null);
+    markers.shift();
+    if (points.length > 1) {
+      calcRoute(directionsService,directionsRenderer);
+    } else {
+      setMapOnAll(null);
+      directionsRenderer.setDirections({routes: []});
+    }
+    
+  }
+   
+   // Adds a marker to the map.
+   function addMarker(location, map, customerNameValue) {
+    var hiddenField = document.getElementById("transportOkHidden");
+    hiddenField.value = '0';
+     // Add the marker at the clicked location, and add the next-available label
+     // from the array of alphabetical characters.
+     var newMarker = new google.maps.Marker({
+       position: location,
+       label: labels[labelIndex++ % labels.length],
+       map: map,
+     });
+
+     markers.push(newMarker);
+   
+     console.log(newMarker.getPosition().lat());
+     console.log(newMarker.getPosition().lng());
+     console.log(newMarker.getLabel());
+   
+     addField(newMarker.getPosition().lat(),newMarker.getPosition().lng(), newMarker.getLabel(),customerNameValue);
+
+     lastPoint = newMarker.getPosition();
+
+     points.push({
+        location: location,
+        stopover: true 
+    });
+     
+     //app.addLocation(newMarker.getPosition().lat(),newMarker.getPosition().lng());
+     //window.kargoApp.addLocation();
+   }
+   
+   function addField(posLat, posLng, label,customerNameValue) {
+       var container = document.getElementById("sidebar");
+       // Append a node with a random text
+       container.appendChild(document.createTextNode("Lokasyon " + (label)));
+       // Create an <input> element, set its type and name attributes
+       var inputLat = document.createElement("input");
+       inputLat.type = "text";
+       inputLat.name = "lat"+ label;
+       inputLat.id = "lat"+ label;
+       inputLat.value = posLat;
+       container.appendChild(inputLat);
+       // Create an <input> element, set its type and name attributes
+       var inputLng = document.createElement("input");
+       inputLng.type = "text";
+       inputLng.name = "lng"+ label;
+       inputLng.id = "lng"+ label;
+       inputLng.value = posLng;
+       container.appendChild(inputLng);
+       // Create an <input> element, set its type and name attributes
+       var inputCustomer = document.createElement("input");
+       inputCustomer.type = "text";
+       inputCustomer.name = "customer"+ label;
+       inputCustomer.id = "customer"+ label;
+       inputCustomer.value = customerNameValue;
+       container.appendChild(inputCustomer);
+       // Append a line break 
+       container.appendChild(document.createElement("br"));
+   }
+   
+      </script>
+
+</body>
+</html>
