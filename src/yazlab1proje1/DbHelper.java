@@ -7,9 +7,9 @@ import java.sql.SQLException;
 
 
 public class DbHelper {
-    static String username ="root";
-    static String password="1234";
-    static String dbUrl="jdbc:mysql://130.211.228.7:3306/transport";
+    static String username ="---------";
+    static String password="------------";
+    static String dbUrl="----------------";
     
     public static Connection getConnection() throws SQLException{
         return(Connection) DriverManager.getConnection(dbUrl, username,password);
