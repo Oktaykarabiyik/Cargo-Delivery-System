@@ -175,7 +175,7 @@ public class Login extends javax.swing.JFrame {
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
         
         try {
-        Connection myConn=(Connection) DriverManager.getConnection("jdbc:mysql://130.211.228.7:3306/transport","root","1234");
+        Connection myConn=(Connection) DriverManager.getConnection("------------------------------");
         Statement myStat1=(Statement)myConn.createStatement();
          ResultSet rs1;
                   rs1 = myStat1.executeQuery("SELECT id FROM users WHERE username="+"\""+userNameLogin.getText()+"\"");//sql sorgusu;
@@ -197,7 +197,7 @@ public class Login extends javax.swing.JFrame {
        else
        {
                   try {
-                      Connection myConn=(Connection) DriverManager.getConnection("jdbc:mysql://130.211.228.7:3306/transport","root","1234");
+                      Connection myConn=(Connection) DriverManager.getConnection("---------------------------");
                       Statement myStat=(Statement)myConn.createStatement();
  
                       ResultSet rs=myStat.executeQuery("SELECT * FROM users");

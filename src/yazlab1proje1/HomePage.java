@@ -79,7 +79,7 @@ public class HomePage extends javax.swing.JFrame {
  DefaultTableModel dm = (DefaultTableModel)cargoTable.getModel();
 dm.getDataVector().removeAllElements();
 cargoTable.repaint(); 
-      Connection myConn=(Connection) DriverManager.getConnection("jdbc:mysql://130.211.228.7:3306/transport","root","1234");
+      Connection myConn=(Connection) DriverManager.getConnection("------------------------------------");
              Statement myStat = (Statement) myConn.createStatement();
              ResultSet rs = myStat.executeQuery("SELECT name,location_id,status,latitude,longitude,locations.id  FROM customers,locations WHERE customers.location_id=locations.id " );
           
@@ -116,7 +116,7 @@ String x,y;
             y=AddressY.getText();
             statement.setString(2,AddressY.getText());
              statement.executeUpdate();
-              Connection myConn=(Connection) DriverManager.getConnection("jdbc:mysql://130.211.228.7:3306/transport","root","1234");
+              Connection myConn=(Connection) DriverManager.getConnection("--------------------------------");
              Statement myStat = (Statement) myConn.createStatement();
              ResultSet rs = myStat.executeQuery("SELECT id  FROM locations WHERE latitude="+"\""+x+"\""+"&& longitude="+"\""+y+"\"");
             
@@ -145,7 +145,7 @@ String x,y;
         DbHelper db = new DbHelper();
         PreparedStatement statement = null;
         try {
-             Connection myConn=(Connection) DriverManager.getConnection("jdbc:mysql://130.211.228.7:3306/transport","root","1234");
+             Connection myConn=(Connection) DriverManager.getConnection("------------------------------");
              Statement myStat = (Statement) myConn.createStatement();
              ResultSet rs = myStat.executeQuery("SELECT id,name  FROM customers WHERE name="+"\""+customerName.getText()+"\"");
          
@@ -203,7 +203,7 @@ String x,y;
         Connection connect = null;
         DbHelper db = new DbHelper();
         PreparedStatement statement = null;
-        Connection myConn=(Connection) DriverManager.getConnection("jdbc:mysql://130.211.228.7:3306/transport","root","1234");
+        Connection myConn=(Connection) DriverManager.getConnection("----------------------------------");
              Statement myStat = (Statement) myConn.createStatement();
              locX=locationX.getText();
              locY=locationY.getText();
@@ -597,7 +597,7 @@ String x,y;
         } else {
 
             try {
-                Connection myConn = (Connection) DriverManager.getConnection("jdbc:mysql://130.211.228.7:3306/transport", "root", "1234");
+                Connection myConn = (Connection) DriverManager.getConnection("------------------------------------");
                 Statement myStat = (Statement) myConn.createStatement();
              ResultSet rs = myStat.executeQuery("SELECT name,location_id,status,latitude,longitude,locations.id  FROM customers,locations WHERE customers.location_id=locations.id " );
        
@@ -640,7 +640,7 @@ String x,y;
                 int silkontrol2=0;
            try {
 
-                Connection myConn = (Connection) DriverManager.getConnection("jdbc:mysql://130.211.228.7:3306/transport", "root", "1234");
+                Connection myConn = (Connection) DriverManager.getConnection("----------------------------------");
                 Statement myStat = (Statement) myConn.createStatement();
                 ResultSet rs = myStat.executeQuery("SELECT * FROM customers");
                 
@@ -694,7 +694,7 @@ String x,y;
         }else{
         try {
 
-                Connection myConn = (Connection) DriverManager.getConnection("jdbc:mysql://130.211.228.7:3306/transport", "root", "1234");
+                Connection myConn = (Connection) DriverManager.getConnection("------------------------------");
                 Statement myStat = (Statement) myConn.createStatement();
                ResultSet rs = myStat.executeQuery("SELECT * FROM customers");
                 while (rs.next()) {

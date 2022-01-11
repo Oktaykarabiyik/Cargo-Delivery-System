@@ -137,7 +137,7 @@ int usernameControl=0;
         PreparedStatement statement = null;
          
              try {
-            Connection myConn;     myConn = (Connection) DriverManager.getConnection("jdbc:mysql://130.211.228.7:3306/transport","root","1234");
+            Connection myConn;     myConn = (Connection) DriverManager.getConnection("----------------------------");
                  Statement myStat=(Statement)myConn.createStatement();
                  ResultSet rs=myStat.executeQuery("SELECT * FROM users");
                       ResultSet rs1;

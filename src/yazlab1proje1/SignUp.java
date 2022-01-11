@@ -149,7 +149,7 @@ int k=0;
       
        else if(usernameSignup.getText().length()!=0 || passwordSignup.getText().length()!=0){
                   try {
-                     Connection myConn = (Connection) DriverManager.getConnection("jdbc:mysql://130.211.228.7:3306/transport", "root", "1234");
+                     Connection myConn = (Connection) DriverManager.getConnection("-------------------------------------");
           
                       Statement myStat=(Statement)myConn.createStatement();
                       ResultSet rs=myStat.executeQuery("SELECT * FROM users");
